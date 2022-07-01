@@ -1,4 +1,4 @@
-import re
+from fastapi.encoders import jsonable_encoder
 from fastapi import FastAPI
 from typing import Optional
 from pydantic import BaseModel
@@ -34,3 +34,9 @@ def add_course(request: Course):
 def delete_course(id:int):
     fakeDB.pop(id-1)
     return {"Message": "Course Deletion Successful"}
+
+@app.put("/courses/{id}")
+def update_course(id:int, updatedCourse: Course):
+    updatedCourseEncoded = jsonable_encoder(updatedCourse)
+    fakeDB[id] = updatedCourseEncoded
+    return {"Message": "Course Updated Successfully"}
